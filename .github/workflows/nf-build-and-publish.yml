@@ -1,0 +1,64 @@
+name: Build and publish
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build:
+    name: Build and publish
+    timeout-minutes: 15
+    runs-on: windows-latest
+    env:
+      SOLUTION: 'CCSWE.nanoFramework.Threading.sln'
+      BUILD_CONFIGURATION: 'Release'
+      GITHUB_TOKEN: ${{ github.token }}
+      NUGET_PACKAGE_NAME: 'CCSWE.nanoFramework.Threading'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup nanoFramework
+        uses: nanoframework/nanobuild@v1
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+
+      - name: Setup Nerdbank.GitVersioning
+        uses: dotnet/nbgv@v0.4.1
+        with:
+          setAllVars: true
+
+      - name: Install dependencies
+        run: nuget restore ${{ env.SOLUTION }} # -ConfigFile NuGet.Config
+
+      - name: Build solution
+        run: msbuild ${{ env.SOLUTION }} /p:Configuration=${{ env.BUILD_CONFIGURATION }} /p:AssemblyVersion=${{ env.NBGV_AssemblyVersion }} /p:FileVersion=${{ env.NBGV_AssemblyFileVersion }} /p:InformationalVersion=${{ env.NBGV_AssemblyInformationalVersion }}
+
+      # TODO: Add tests
+
+      - name: Build NuGet packages
+        run: nuget pack ${{ env.NUGET_PACKAGE_NAME }}.nuspec -Version ${{ env.NBGV_NuGetPackageVersion }} -Symbols -SymbolPackageFormat snupkg -properties Configuration=${{ env.BUILD_CONFIGURATION }}
+
+#      - name: Upload NuGet packages
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: nuget-packages
+#          path: |
+#            ${{ github.workspace }}\**\*.nupkg
+#            ${{ github.workspace }}\**\*.snupkg
+
+      - name: Publish NuGet packages to nuget.org
+        if: startsWith(github.ref, 'refs/heads/master')
+        run: |
+          nuget push "**/${{ env.NUGET_PACKAGE_NAME }}*.nupkg" -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_ORG_API_KEY }} -SkipDuplicate
