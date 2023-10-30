@@ -15,6 +15,7 @@
     <RootNamespace>CCSWE.nanoFramework.Threading.Benchmarks</RootNamespace>
     <AssemblyName>CCSWE.nanoFramework.Threading.Benchmarks</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
+	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>

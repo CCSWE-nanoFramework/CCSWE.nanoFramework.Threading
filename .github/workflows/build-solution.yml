@@ -1,4 +1,4 @@
-name: Build and publish
+name: Build solution
 
 on: [push, pull_request]
 
@@ -8,14 +8,14 @@ defaults:
 
 jobs:
   build:
-    name: Build and publish
+    name: Build solution
     timeout-minutes: 15
     runs-on: windows-latest
     env:
-      SOLUTION: 'CCSWE.nanoFramework.Threading.sln'
       BUILD_CONFIGURATION: 'Release'
       GITHUB_TOKEN: ${{ github.token }}
       NUGET_PACKAGE_NAME: 'CCSWE.nanoFramework.Threading'
+      SOLUTION: 'CCSWE.nanoFramework.Threading.sln'
 
     steps:
       - name: Checkout
@@ -40,7 +40,7 @@ jobs:
           setAllVars: true
 
       - name: Install dependencies
-        run: nuget restore ${{ env.SOLUTION }} # -ConfigFile NuGet.Config
+        run: nuget restore ${{ env.SOLUTION }}
 
       - name: Build solution
         run: msbuild ${{ env.SOLUTION }} /p:Configuration=${{ env.BUILD_CONFIGURATION }} /p:AssemblyVersion=${{ env.NBGV_AssemblyVersion }} /p:FileVersion=${{ env.NBGV_AssemblyFileVersion }} /p:InformationalVersion=${{ env.NBGV_AssemblyInformationalVersion }}
@@ -49,14 +49,6 @@ jobs:
 
       - name: Build NuGet packages
         run: nuget pack ${{ env.NUGET_PACKAGE_NAME }}.nuspec -Version ${{ env.NBGV_NuGetPackageVersion }} -Symbols -SymbolPackageFormat snupkg -properties Configuration=${{ env.BUILD_CONFIGURATION }}
-
-#      - name: Upload NuGet packages
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: nuget-packages
-#          path: |
-#            ${{ github.workspace }}\**\*.nupkg
-#            ${{ github.workspace }}\**\*.snupkg
 
       - name: Publish NuGet packages to nuget.org
         if: startsWith(github.ref, 'refs/heads/master')
