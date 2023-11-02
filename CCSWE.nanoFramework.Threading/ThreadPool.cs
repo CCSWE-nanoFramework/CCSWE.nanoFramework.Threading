@@ -9,6 +9,8 @@ using CCSWE.nanoFramework.Threading.Internal;
 
 namespace CCSWE.nanoFramework.Threading
 {
+    // TODO: Move all the logic out of static methods so I can test a disposable instance in the unit tests
+
     /// <summary>
     /// Provides a pool of threads that can be used to execute tasks, post work items, process asynchronous I/O, wait on behalf of other threads, and process timers.
     /// </summary>
