@@ -32,8 +32,8 @@
     <Compile Include="WaitHandles.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=0.4.3.18730, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.0.4.3\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
+    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=0.4.4.44317, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.0.4.4\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CCSWE.nanoFramework.Core, Version=0.2.6.8714, Culture=neutral, PublicKeyToken=null">
