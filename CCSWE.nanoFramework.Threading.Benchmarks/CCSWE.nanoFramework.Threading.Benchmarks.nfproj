@@ -15,7 +15,7 @@
     <RootNamespace>CCSWE.nanoFramework.Threading.Benchmarks</RootNamespace>
     <AssemblyName>CCSWE.nanoFramework.Threading.Benchmarks</AssemblyName>
     <TargetFrameworkVersion>v1.0</TargetFrameworkVersion>
-	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
@@ -25,8 +25,9 @@
     <Compile Include="ThreadPoolBenchmarks.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="mscorlib">
-      <HintPath>..\packages\nanoFramework.CoreLibrary.1.14.2\lib\mscorlib.dll</HintPath>
+    <Reference Include="mscorlib, Version=1.14.20.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.CoreLibrary.1.14.20\lib\mscorlib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nanoFramework.Benchmark">
       <HintPath>..\packages\nanoFramework.Benchmark.1.0.56\lib\nanoFramework.Benchmark.dll</HintPath>
