@@ -203,24 +203,26 @@ namespace CCSWE.nanoFramework.Threading.Internal
         /// </summary>
         /// <param name="workerThreads">The minimum number of active worker threads.</param>
         /// <returns><see langword="true"/> if the change is successful; otherwise, <see langword="false"/>.</returns>
-        public bool SetMinThreads(int workerThreads)
+        public bool SetMinThreads(int workerThreads) => SetMinThreads(workerThreads, false);
+
+        internal bool SetMinThreads(int workerThreads, bool waitForCompletion)
         {
             ThrowIfDisposed();
 
-            if (workerThreads <= 0)
+            if (workerThreads <= 0 || workerThreads > Workers)
             {
                 return false;
             }
 
-            if (ThreadCount >= Workers)
+            if (ThreadCount >= workerThreads)
             {
-                return false;
+                return true;
             }
+
+            var completionEvent = new ManualResetEvent(false);
 
             QueueUserWorkItem(_ =>
             {
-                var completionEvent = new ManualResetEvent(false);
-
                 while (ThreadCount < workerThreads)
                 {
                     QueueUserWorkItem(_ => { completionEvent.WaitOne(); });
@@ -228,6 +230,11 @@ namespace CCSWE.nanoFramework.Threading.Internal
 
                 completionEvent.Set();
             });
+
+            if (waitForCompletion)
+            {
+                completionEvent.WaitOne();
+            }
 
             return true;
         }
