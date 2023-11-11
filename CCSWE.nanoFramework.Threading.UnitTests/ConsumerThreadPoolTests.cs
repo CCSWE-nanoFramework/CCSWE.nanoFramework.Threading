@@ -12,14 +12,11 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
         public void Enqueue_should_throw_ArgumentNullException_if_item_is_null()
         {
             var completed = false;
-            var threadPool = new ThreadPoolInternal(1, 1);
-            var sut = new ConsumerThreadPool(1, _ => { completed = true; }, threadPool);
+            using var threadPool = new ThreadPoolInternal(1, 1);
+            using var sut = new ConsumerThreadPool(1, _ => { completed = true; }, threadPool);
 
             Assert.ThrowsException(typeof(ArgumentNullException), () => sut.Enqueue(null!));
             Thread.Sleep(0);
-
-            sut.Dispose();
-            threadPool.Dispose();
 
             Assert.IsFalse(completed);
         }
@@ -41,9 +38,9 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
             var completedEvent = new ManualResetEvent(false);
             var expected = 16;
             var processed = 0;
-            var threadPool = new ThreadPoolInternal(expected, expected);
+            using var threadPool = new ThreadPoolInternal(expected, expected);
 
-            var sut = new ConsumerThreadPool(4, item =>
+            using var sut = new ConsumerThreadPool(4, item =>
             {
                 var current = Interlocked.Increment(ref processed);
 
@@ -59,9 +56,6 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
             }
 
             var completed = completedEvent.WaitOne(10_000, false);
-
-            sut.Dispose();
-            threadPool.Dispose();
 
             Assert.AreEqual(expected, processed);
             Assert.IsTrue(completed, "Completed");
