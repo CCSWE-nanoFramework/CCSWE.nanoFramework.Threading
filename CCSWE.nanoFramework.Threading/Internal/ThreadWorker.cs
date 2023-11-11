@@ -15,7 +15,13 @@ namespace CCSWE.nanoFramework.Threading.Internal
         private readonly object _lock = new();
         private object? _state;
         private Thread? _thread;
+        private readonly ThreadPoolInternal _threadPool;
         private readonly AutoResetEvent _workItemPosted = new(false);
+
+        public ThreadWorker(ThreadPoolInternal threadPool)
+        {
+            _threadPool = threadPool;
+        }
 
         public int Id => _thread is not null ? _thread.ManagedThreadId : -1;
 
@@ -37,7 +43,7 @@ namespace CCSWE.nanoFramework.Threading.Internal
                     }
                 }
 
-                ThreadPool.ExecutePendingWorkItems();
+                _threadPool.ExecutePendingWorkItems();
 
                 // If more work was posted to this worker as a result of call to ExecutePendingWorkItems, continue the work immediately
                 if (_callback is not null)

@@ -22,6 +22,7 @@
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
     <Compile Include="ConsumerThreadPool.cs" />
+    <Compile Include="Internal\ThreadPoolInternal.cs" />
     <Compile Include="Internal\WorkItemQueue.cs" />
     <Compile Include="Internal\ThreadWorkerQueue.cs" />
     <Compile Include="Internal\ThreadWorker.cs" />
