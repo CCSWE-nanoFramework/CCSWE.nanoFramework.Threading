@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using CCSWE.nanoFramework.Collections.Concurrent;
+using CCSWE.nanoFramework.Threading.Internal;
 
 namespace CCSWE.nanoFramework.Threading
 {
@@ -50,6 +51,36 @@ namespace CCSWE.nanoFramework.Threading
             */
         }
 
+        internal ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback, ThreadPoolInternal threadPool)
+        {
+            Ensure.IsInRange(nameof(consumersThreads), consumersThreads > 0, $"'{nameof(consumersThreads)}' must be greater than zero.");
+            Ensure.IsNotNull(nameof(consumerCallback), consumerCallback);
+
+            _consumerCallback = consumerCallback;
+
+            var threadsStarting = threadPool.QueueUserWorkItem(_ =>
+            {
+                for (var i = 0; i < consumersThreads; i++)
+                {
+                    var consumerThread = new Thread(ConsumerThreadStart);
+                    consumerThread.Start();
+                }
+            });
+
+            if (!threadsStarting)
+            {
+                var thread = new Thread(() =>
+                {
+                    for (var i = 0; i < consumersThreads; i++)
+                    {
+                        var consumerThread = new Thread(ConsumerThreadStart);
+                        consumerThread.Start();
+                    }
+                });
+                thread.Start();
+            }
+        }
+
         ~ConsumerThreadPool()
         {
             Dispose(false);
@@ -58,14 +89,6 @@ namespace CCSWE.nanoFramework.Threading
         private CancellationToken CancellationToken => CancellationTokenSource.Token;
 
         private CancellationTokenSource CancellationTokenSource { get; } = new();
-
-        private void CheckDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(ConsumerThreadPool));
-            }
-        }
  
         private void ConsumerThreadStart()
         {
@@ -125,12 +148,20 @@ namespace CCSWE.nanoFramework.Threading
         /// <param name="item">The object to add to the queue.</param>
         public void Enqueue(object item)
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             Ensure.IsNotNull(nameof(item), item);
 
             _items.Enqueue(item);
             _itemPending.Set();
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(ConsumerThreadPool));
+            }
         }
     }
 

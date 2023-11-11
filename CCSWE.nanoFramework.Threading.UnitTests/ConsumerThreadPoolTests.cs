@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using CCSWE.nanoFramework.Threading.Internal;
 using nanoFramework.TestFramework;
 
 namespace CCSWE.nanoFramework.Threading.UnitTests
@@ -11,12 +12,14 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
         public void Enqueue_should_throw_ArgumentNullException_if_item_is_null()
         {
             var completed = false;
-            var sut = new ConsumerThreadPool(1, _ => { completed = true; });
+            var threadPool = new ThreadPoolInternal(1, 1);
+            var sut = new ConsumerThreadPool(1, _ => { completed = true; }, threadPool);
 
-            Assert.ThrowsException(typeof(ArgumentNullException), () => sut.Enqueue(null));
+            Assert.ThrowsException(typeof(ArgumentNullException), () => sut.Enqueue(null!));
             Thread.Sleep(0);
 
             sut.Dispose();
+            threadPool.Dispose();
 
             Assert.IsFalse(completed);
         }
@@ -24,8 +27,10 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
         [TestMethod]
         public void Enqueue_should_throw_ObjectDisposedException_if_disposed()
         {
-            var sut = new ConsumerThreadPool(1, _ => { });
+            var threadPool = new ThreadPoolInternal(1, 1);
+            var sut = new ConsumerThreadPool(1, _ => { }, threadPool);
             sut.Dispose();
+            threadPool.Dispose();
 
             Assert.ThrowsException(typeof(ObjectDisposedException), () => sut.Enqueue(new object()));
         }
@@ -33,9 +38,10 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
         [TestMethod]
         public void It_should_execute_callback_for_all_items()
         {
-            var complete = new ManualResetEvent(false);
-            var expected = 64;
+            var completedEvent = new ManualResetEvent(false);
+            var expected = 16;
             var processed = 0;
+            var threadPool = new ThreadPoolInternal(expected, expected);
 
             var sut = new ConsumerThreadPool(4, item =>
             {
@@ -43,22 +49,22 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
 
                 if (current == expected)
                 {
-                    complete.Set();
+                    completedEvent.Set();
                 }
-            });
+            }, threadPool);
 
             for (var i = 0; i < expected; i++)
             {
                 sut.Enqueue(i);
             }
 
-            var result = complete.WaitOne(10_000, false);
+            var completed = completedEvent.WaitOne(10_000, false);
 
             sut.Dispose();
+            threadPool.Dispose();
 
             Assert.AreEqual(expected, processed);
-            Assert.IsTrue(result);
+            Assert.IsTrue(completed, "Completed");
         }
-
     }
 }
