@@ -1,14 +1,8 @@
-﻿//
-// Copyright (c) .NET Foundation and Contributors
-// Portions Copyright (c) Microsoft Corporation.  All rights reserved.
-// See LICENSE file in the project root for full license information.
-//
-
+﻿using System.Diagnostics;
 using System.Threading;
 
 namespace CCSWE.nanoFramework.Threading.Internal
 {
-    // TODO: Allow for worker to be cancelled with CancellationToken?
     internal class ThreadWorker
     {
         private WaitCallback? _callback;
@@ -29,9 +23,15 @@ namespace CCSWE.nanoFramework.Threading.Internal
 
         private void ExecuteWorkItems()
         {
-            while (true)
+#if DEBUG
+            Debug.WriteLine($"Thread {Id} started");
+#endif
+
+            while (!_threadPool.CancellationToken.IsCancellationRequested)
             {
-                //Debug.WriteLine($"Thread {Id} started");
+#if DEBUG
+                Debug.WriteLine($"Thread {Id} started work");
+#endif
 
                 lock (_lock)
                 {
@@ -43,6 +43,10 @@ namespace CCSWE.nanoFramework.Threading.Internal
                     }
                 }
 
+#if DEBUG
+                Debug.WriteLine($"Thread {Id} completed work");
+#endif
+
                 _threadPool.ExecutePendingWorkItems();
 
                 // If more work was posted to this worker as a result of call to ExecutePendingWorkItems, continue the work immediately
@@ -51,13 +55,24 @@ namespace CCSWE.nanoFramework.Threading.Internal
                     continue;
                 }
 
-                //Debug.WriteLine($"Thread {Id} exited");
+                if (_threadPool.CancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
 
-                _workItemPosted.WaitOne();
+                var waitHandle = WaitHandles.WaitAny(_threadPool.CancellationToken.WaitHandle, _workItemPosted);
+                if (waitHandle == 0)
+                {
+                    break;
+                }
             }
+
+#if DEBUG
+            Debug.WriteLine($"Thread {Id} completed");
+#endif
         }
 
-        public void Post(WaitCallback callback, object? state)
+            public void Post(WaitCallback callback, object? state)
         {
             Ensure.IsNotNull(nameof(callback), callback);
 

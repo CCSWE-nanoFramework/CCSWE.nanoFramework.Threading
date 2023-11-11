@@ -1,32 +1,25 @@
-﻿using System.Threading;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace CCSWE.nanoFramework.Threading.Internal
 {
     /// <summary>
     /// Provides a pool of threads that can be used to execute tasks, post work items, process asynchronous I/O, wait on behalf of other threads, and process timers.
     /// </summary>
-    internal class ThreadPoolInternal
+    internal class ThreadPoolInternal: IDisposable
     {
         // TODO: Implement idle thread timeout?
         private const int ThreadPoolThreadTimeoutMs = 20 * 1000;
 
-        /// <summary>
-        /// Maximum number of workers.
-        /// </summary>
-        public const int Workers = 64;
-
-        /// <summary>
-        /// Maximum number of queued work items. Work is queued when all workers are already working.
-        /// This allows for a maximum of (Workers+WorkItems) posted concurrently.
-        /// </summary>
-        public const int WorkItems = 64;
-
-        // Using fixed arrays for performance
-        private WorkItemQueue _pendingWorkItems = new(WorkItems);
-        private ThreadWorkerQueue _threadWorkers = new(Workers);
-
-        // ReSharper disable once InconsistentNaming
+        private bool _disposed;
         private readonly object _lock = new();
+        private WorkItemQueue _pendingWorkItems;
+        private ThreadWorkerQueue _threadWorkers;
+
+        internal CancellationToken CancellationToken { get; }
+
+        private CancellationTokenSource CancellationTokenSource { get; } = new();
 
         /// <summary>
         ///  Gets the number of work items that are currently queued to be processed.
@@ -34,6 +27,7 @@ namespace CCSWE.nanoFramework.Threading.Internal
         /// <value>
         /// The number of work items that are currently queued to be processed.
         /// </value>
+        // ReSharper disable once InconsistentlySynchronizedField
         public long PendingWorkItemCount => _pendingWorkItems.Count;
 
         /// <summary>
@@ -42,7 +36,75 @@ namespace CCSWE.nanoFramework.Threading.Internal
         /// <value>
         /// The number of thread pool threads that currently exist.
         /// </value>
+        // ReSharper disable once InconsistentlySynchronizedField
         public int ThreadCount => _threadWorkers.Count;
+
+        /// <summary>
+        /// Maximum number of workers.
+        /// </summary>
+        public int Workers { get; }
+
+        /// <summary>
+        /// Maximum number of queued work items. Work is queued when all workers are already working.
+        /// This allows for a maximum of (Workers+WorkItems) posted concurrently.
+        /// </summary>
+        public int WorkItems { get; }
+
+        public ThreadPoolInternal(int workers, int workItems)
+        {
+            Ensure.IsInRange(nameof(workers), workers > 0, $"{nameof(workers)} must be greater than zero");
+            Ensure.IsInRange(nameof(workItems), workItems > 0, $"{nameof(workItems)} must be greater than zero");
+
+            CancellationToken = CancellationTokenSource.Token;
+            Workers = workers;
+            WorkItems = workItems;
+
+            // Using fixed arrays for performance
+            _pendingWorkItems = new WorkItemQueue(WorkItems);
+            _threadWorkers = new ThreadWorkerQueue(Workers);
+        }
+
+        ~ThreadPoolInternal()
+        {
+            Dispose(false);
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            lock (_lock)
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            CancellationTokenSource.Cancel();
+
+            if (disposing)
+            {
+                CancellationTokenSource.Dispose();
+            }
+
+            _disposed = true;
+        }
 
         internal void ExecutePendingWorkItems()
         {
@@ -104,7 +166,9 @@ namespace CCSWE.nanoFramework.Threading.Internal
 
             _threadWorkers.Enqueue(worker);
 
-            //Debug.WriteLine($"{_threadWorkers.Count} workers started");
+#if DEBUG
+            Debug.WriteLine($"{_threadWorkers.Count} workers started");
+#endif
 
             return worker;
         }
@@ -117,6 +181,8 @@ namespace CCSWE.nanoFramework.Threading.Internal
         /// <returns><see langword="true"/> if the method is successfully queued; <see langword="false"/> otherwise.</returns>
         public bool QueueUserWorkItem(WaitCallback callback, object? state = null)
         {
+            ThrowIfDisposed();
+
             Ensure.IsNotNull(nameof(callback), callback);
 
             lock (_lock)
@@ -132,18 +198,6 @@ namespace CCSWE.nanoFramework.Threading.Internal
             }
         }
 
-        // TODO: Implement adjusting thread counts?
-
-        /// <summary>
-        /// Sets the number of requests to the thread pool that can be active concurrently. All requests above that number remain queued until thread pool threads become available.
-        /// </summary>
-        /// <param name="workerThreads">The maximum number of worker threads in the thread pool.</param>
-        /// <returns><see langword="true"/> if the change is successful; otherwise, <see langword="false"/>.</returns>
-        public bool SetMaxThreads(int workerThreads)
-        {
-            return false;
-        }
-
         /// <summary>
         /// Sets the minimum number of active worker threads.
         /// </summary>
@@ -151,6 +205,8 @@ namespace CCSWE.nanoFramework.Threading.Internal
         /// <returns><see langword="true"/> if the change is successful; otherwise, <see langword="false"/>.</returns>
         public bool SetMinThreads(int workerThreads)
         {
+            ThrowIfDisposed();
+
             if (workerThreads <= 0)
             {
                 return false;
@@ -174,6 +230,14 @@ namespace CCSWE.nanoFramework.Threading.Internal
             });
 
             return true;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(ThreadPoolInternal));
+            }
         }
     }
 }
