@@ -7,18 +7,7 @@ namespace CCSWE.nanoFramework.Threading
     /// </summary>
     public static class ThreadPool
     {
-        private static readonly ThreadPoolInternal Instance = new();
-
-        /// <summary>
-        /// Maximum number of workers.
-        /// </summary>
-        public const int Workers = ThreadPoolInternal.Workers;
-
-        /// <summary>
-        /// Maximum number of queued work items. Work is queued when all workers are already working.
-        /// This allows for a maximum of (Workers+WorkItems) posted concurrently.
-        /// </summary>
-        public const int WorkItems = ThreadPoolInternal.WorkItems;
+        internal static readonly ThreadPoolInternal Instance = new(64, 64);
 
         /// <summary>
         ///  Gets the number of work items that are currently queued to be processed.
@@ -37,19 +26,23 @@ namespace CCSWE.nanoFramework.Threading
         public static int ThreadCount => Instance.ThreadCount;
 
         /// <summary>
+        /// Maximum number of workers.
+        /// </summary>
+        public static int Workers => Instance.Workers;
+
+        /// <summary>
+        /// Maximum number of queued work items. Work is queued when all workers are already working.
+        /// This allows for a maximum of (Workers+WorkItems) posted concurrently.
+        /// </summary>
+        public static int WorkItems => Instance.WorkItems;
+
+        /// <summary>
         /// Queues a method for execution, and specifies an object containing data to be used by the method. The method executes when a thread pool thread becomes available.
         /// </summary>
         /// <param name="callback">A <see cref="WaitCallback"/> representing the method to execute.</param>
         /// <param name="state">An object containing data to be used by the method.</param>
         /// <returns><see langword="true"/> if the method is successfully queued; <see langword="false"/> otherwise.</returns>
         public static bool QueueUserWorkItem(WaitCallback callback, object? state = null) => Instance.QueueUserWorkItem(callback, state);
-
-        /// <summary>
-        /// Sets the number of requests to the thread pool that can be active concurrently. All requests above that number remain queued until thread pool threads become available.
-        /// </summary>
-        /// <param name="workerThreads">The maximum number of worker threads in the thread pool.</param>
-        /// <returns><see langword="true"/> if the change is successful; otherwise, <see langword="false"/>.</returns>
-        public static bool SetMaxThreads(int workerThreads) => Instance.SetMaxThreads(workerThreads);
 
         /// <summary>
         /// Sets the minimum number of active worker threads.
