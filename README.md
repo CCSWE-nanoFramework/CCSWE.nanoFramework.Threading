@@ -3,3 +3,15 @@
 # CCSWE.nanoFramework.Threading
 
 A collection of utilities to simplify thread usage.
+
+### ThreadPool
+
+A general purpose thread pool that helps to eliminate the cost of spinning up new threads.
+
+### ConsumerThreadPool
+
+Provides a specialized thread pool to process items from a queue asynchronously.
+
+### WaitHandles
+
+"Extension" methods that simplify waiting on multiple `WaitHandle`
