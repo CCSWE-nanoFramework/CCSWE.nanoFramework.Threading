@@ -21,34 +21,9 @@ namespace CCSWE.nanoFramework.Threading
         /// </summary>
         /// <param name="consumersThreads">The number of consumer threads to create.</param>
         /// <param name="consumerCallback">The callback responsible for processing items added.</param>
-        public ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback)
+        public ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback): this(consumersThreads, consumerCallback, ThreadPool.Instance)
         {
-            Ensure.IsInRange(nameof(consumersThreads), consumersThreads > 0, $"'{nameof(consumersThreads)}' must be greater than zero.");
-            Ensure.IsNotNull(nameof(consumerCallback), consumerCallback);
-
-            _consumerCallback = consumerCallback;
-
-            // TODO: For the sake of unit tests I am skipping the thread pool for now...
-            var thread = new Thread(() =>
-            {
-                for (var i = 0; i < consumersThreads; i++)
-                {
-                    var consumerThread = new Thread(ConsumerThreadStart);
-                    consumerThread.Start();
-                }
-            });
-            thread.Start();
-            
-            /*
-            ThreadPool.QueueUserWorkItem(_ =>
-            {
-                for (var i = 0; i < consumersThreads; i++)
-                {
-                    var consumerThread = new Thread(ConsumerThreadStart);
-                    consumerThread.Start();
-                }
-            });
-            */
+            // Empty constructor
         }
 
         internal ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback, ThreadPoolInternal threadPool)
@@ -56,37 +31,28 @@ namespace CCSWE.nanoFramework.Threading
             Ensure.IsInRange(nameof(consumersThreads), consumersThreads > 0, $"'{nameof(consumersThreads)}' must be greater than zero.");
             Ensure.IsNotNull(nameof(consumerCallback), consumerCallback);
 
+            CancellationToken = CancellationTokenSource.Token;
+
             _consumerCallback = consumerCallback;
 
-            var threadsStarting = threadPool.QueueUserWorkItem(_ =>
-            {
-                for (var i = 0; i < consumersThreads; i++)
-                {
-                    var consumerThread = new Thread(ConsumerThreadStart);
-                    consumerThread.Start();
-                }
-            });
+            var threadsStarting = threadPool.QueueUserWorkItem(_ => { CreateConsumerThreads(consumersThreads); });
 
             if (!threadsStarting)
             {
-                var thread = new Thread(() =>
-                {
-                    for (var i = 0; i < consumersThreads; i++)
-                    {
-                        var consumerThread = new Thread(ConsumerThreadStart);
-                        consumerThread.Start();
-                    }
-                });
-                thread.Start();
+                // Thread pool was full so we'll spin up a new thread to create the consumer threads
+                new Thread(() => { CreateConsumerThreads(consumersThreads); }).Start();
             }
         }
 
+        /// <summary>
+        /// Finalizes the <see cref="ConsumerThreadPool"/>.
+        /// </summary>
         ~ConsumerThreadPool()
         {
             Dispose(false);
         }
 
-        private CancellationToken CancellationToken => CancellationTokenSource.Token;
+        private CancellationToken CancellationToken { get; }
 
         private CancellationTokenSource CancellationTokenSource { get; } = new();
  
@@ -104,6 +70,15 @@ namespace CCSWE.nanoFramework.Threading
                 {
                     _consumerCallback(item);
                 }
+            }
+        }
+
+        private void CreateConsumerThreads(int consumersThreads)
+        {
+            for (var i = 0; i < consumersThreads; i++)
+            {
+                var consumerThread = new Thread(ConsumerThreadStart);
+                consumerThread.Start();
             }
         }
 
