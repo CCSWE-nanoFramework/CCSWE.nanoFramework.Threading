@@ -4,7 +4,7 @@ using nanoFramework.TestFramework;
 namespace CCSWE.nanoFramework.Threading.UnitTests.TestFramework
 {
     [TestClass]
-    public class ThreadPoolManagerTests
+    public class ThreadPoolTestHelperTests
     {
         [TestMethod]
         public void Reset_sets_ThreadPool_to_initial_state()
@@ -13,7 +13,7 @@ namespace CCSWE.nanoFramework.Threading.UnitTests.TestFramework
             ThreadPool.SetMinThreads(initialThreads, true);
             Assert.AreEqual(initialThreads, ThreadPool.ThreadCount, "Threads before reset");
 
-            ThreadPoolManager.Reset();
+            ThreadPoolTestHelper.Reset();
             Assert.AreEqual(0, ThreadPool.ThreadCount, "Threads after reset");
         }
     }
