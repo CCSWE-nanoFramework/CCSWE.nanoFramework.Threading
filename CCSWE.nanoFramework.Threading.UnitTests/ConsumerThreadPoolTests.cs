@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using CCSWE.nanoFramework.Threading.Internal;
+using CCSWE.nanoFramework.Threading.TestFramework;
 using nanoFramework.TestFramework;
 
 namespace CCSWE.nanoFramework.Threading.UnitTests
@@ -11,54 +11,59 @@ namespace CCSWE.nanoFramework.Threading.UnitTests
         [TestMethod]
         public void Enqueue_should_throw_ArgumentNullException_if_item_is_null()
         {
-            var completed = false;
-            using var threadPool = new ThreadPoolInternal(1, 1);
-            using var sut = new ConsumerThreadPool(1, _ => { completed = true; }, threadPool);
+            ThreadPoolTestHelper.ExecuteAndReset(() =>
+            {
+                var completed = false;
+                using var sut = new ConsumerThreadPool(1, _ => { completed = true; });
 
-            Assert.ThrowsException(typeof(ArgumentNullException), () => sut.Enqueue(null!));
-            Thread.Sleep(0);
+                Assert.ThrowsException(typeof(ArgumentNullException), () => sut.Enqueue(null!));
+                Thread.Sleep(0);
 
-            Assert.IsFalse(completed);
+                Assert.IsFalse(completed);
+            });
         }
 
         [TestMethod]
         public void Enqueue_should_throw_ObjectDisposedException_if_disposed()
         {
-            var threadPool = new ThreadPoolInternal(1, 1);
-            var sut = new ConsumerThreadPool(1, _ => { }, threadPool);
-            sut.Dispose();
-            threadPool.Dispose();
+            ThreadPoolTestHelper.ExecuteAndReset(() =>
+            {
+                var sut = new ConsumerThreadPool(1, _ => { } );
+                sut.Dispose();
 
-            Assert.ThrowsException(typeof(ObjectDisposedException), () => sut.Enqueue(new object()));
+                Assert.ThrowsException(typeof(ObjectDisposedException), () => sut.Enqueue(new object()));
+            });
         }
 
         [TestMethod]
         public void It_should_execute_callback_for_all_items()
         {
-            var completedEvent = new ManualResetEvent(false);
-            var expected = 16;
-            var processed = 0;
-            using var threadPool = new ThreadPoolInternal(expected, expected);
-
-            using var sut = new ConsumerThreadPool(4, item =>
+            ThreadPoolTestHelper.ExecuteAndReset(() =>
             {
-                var current = Interlocked.Increment(ref processed);
+                var completedEvent = new ManualResetEvent(false);
+                var expected = 16;
+                var processed = 0;
 
-                if (current == expected)
+                using var sut = new ConsumerThreadPool(4, item =>
                 {
-                    completedEvent.Set();
+                    var current = Interlocked.Increment(ref processed);
+
+                    if (current == expected)
+                    {
+                        completedEvent.Set();
+                    }
+                });
+
+                for (var i = 0; i < expected; i++)
+                {
+                    sut.Enqueue(i);
                 }
-            }, threadPool);
 
-            for (var i = 0; i < expected; i++)
-            {
-                sut.Enqueue(i);
-            }
+                var completed = completedEvent.WaitOne(10_000, false);
 
-            var completed = completedEvent.WaitOne(10_000, false);
-
-            Assert.AreEqual(expected, processed);
-            Assert.IsTrue(completed, "Completed");
+                Assert.AreEqual(expected, processed);
+                Assert.IsTrue(completed, "Completed");
+            });
         }
     }
 }
