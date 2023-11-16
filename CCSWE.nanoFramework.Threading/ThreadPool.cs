@@ -7,7 +7,10 @@ namespace CCSWE.nanoFramework.Threading
     /// </summary>
     public static class ThreadPool
     {
-        internal static readonly ThreadPoolInternal Instance = new(64, 64);
+        internal const int ThreadPoolWorkers = 64;
+        internal const int ThreadPoolWorkItems = 64;
+
+        internal static ThreadPoolInternal Instance = new(ThreadPoolWorkers, ThreadPoolWorkItems);
 
         /// <summary>
         ///  Gets the number of work items that are currently queued to be processed.
@@ -50,6 +53,8 @@ namespace CCSWE.nanoFramework.Threading
         /// <param name="workerThreads">The minimum number of active worker threads.</param>
         /// <returns><see langword="true"/> if the change is successful; otherwise, <see langword="false"/>.</returns>
         public static bool SetMinThreads(int workerThreads) => Instance.SetMinThreads(workerThreads);
+
+        internal static bool SetMinThreads(int workerThreads, bool waitForCompletion) => Instance.SetMinThreads(workerThreads, waitForCompletion);
     }
 
     /// <summary>
