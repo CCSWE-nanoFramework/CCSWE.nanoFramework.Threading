@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{FEAC1737-88B4-4F81-A2B0-67C89FD190EE}"
 	ProjectSection(SolutionItems) = preProject
 		CCSWE.nanoFramework.Threading.nuspec = CCSWE.nanoFramework.Threading.nuspec
+		CCSWE.nanoFramework.Threading.TestFramework.nuspec = CCSWE.nanoFramework.Threading.TestFramework.nuspec
 		version.json = version.json
 	EndProjectSection
 EndProject
@@ -28,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{1701429F-7
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "CCSWE.nanoFramework.Threading.TestFramework", "CCSWE.nanoFramework.Threading.TestFramework\CCSWE.nanoFramework.Threading.TestFramework.nfproj", "{94086FBA-7338-4C72-824F-122F63CEC2EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +56,12 @@ Global
 		{AA065FE3-AB45-42BE-A361-FC7ADFE58173}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA065FE3-AB45-42BE-A361-FC7ADFE58173}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA065FE3-AB45-42BE-A361-FC7ADFE58173}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{94086FBA-7338-4C72-824F-122F63CEC2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94086FBA-7338-4C72-824F-122F63CEC2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94086FBA-7338-4C72-824F-122F63CEC2EF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{94086FBA-7338-4C72-824F-122F63CEC2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94086FBA-7338-4C72-824F-122F63CEC2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94086FBA-7338-4C72-824F-122F63CEC2EF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
