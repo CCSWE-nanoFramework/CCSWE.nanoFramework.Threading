@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using CCSWE.nanoFramework.Collections.Concurrent;
-using CCSWE.nanoFramework.Threading.Internal;
 
 namespace CCSWE.nanoFramework.Threading
 {
@@ -21,12 +20,7 @@ namespace CCSWE.nanoFramework.Threading
         /// </summary>
         /// <param name="consumersThreads">The number of consumer threads to create.</param>
         /// <param name="consumerCallback">The callback responsible for processing items added.</param>
-        public ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback): this(consumersThreads, consumerCallback, ThreadPool.Instance)
-        {
-            // Empty constructor
-        }
-
-        internal ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback, ThreadPoolInternal threadPool)
+        public ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback)
         {
             Ensure.IsInRange(nameof(consumersThreads), consumersThreads > 0, $"'{nameof(consumersThreads)}' must be greater than zero.");
             Ensure.IsNotNull(nameof(consumerCallback), consumerCallback);
@@ -35,7 +29,7 @@ namespace CCSWE.nanoFramework.Threading
 
             _consumerCallback = consumerCallback;
 
-            var threadsStarting = threadPool.QueueUserWorkItem(_ => { CreateConsumerThreads(consumersThreads); });
+            var threadsStarting = ThreadPool.QueueUserWorkItem(_ => { CreateConsumerThreads(consumersThreads); });
 
             if (!threadsStarting)
             {
