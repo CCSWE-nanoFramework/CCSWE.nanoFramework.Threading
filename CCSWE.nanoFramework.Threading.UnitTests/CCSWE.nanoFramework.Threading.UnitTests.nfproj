@@ -29,7 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConsumerThreadPoolTests.cs" />
-    <Compile Include="TestFramework\ThreadPoolManagerTests.cs" />
+    <Compile Include="TestFramework\ThreadPoolTestHelperTests.cs" />
     <Compile Include="ThreadPoolInternalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
