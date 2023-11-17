@@ -21,5 +21,5 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("CCSWE.nanoFramework.Threading.Benchmarks")]
 [assembly: InternalsVisibleTo("CCSWE.nanoFramework.Threading.TestFramework")]
-[assembly: InternalsVisibleTo("CCSWE.nanoFramework.Threading.WebServer")]
+[assembly: InternalsVisibleTo("CCSWE.nanoFramework.WebServer")]
 [assembly: InternalsVisibleTo("NFUnitTest")]
