@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{1701429F-7
 EndProject
 Project("{11A8DD76-328B-46DF-9F39-F559912D0360}") = "CCSWE.nanoFramework.Threading.TestFramework", "CCSWE.nanoFramework.Threading.TestFramework\CCSWE.nanoFramework.Threading.TestFramework.nfproj", "{94086FBA-7338-4C72-824F-122F63CEC2EF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4CD4A7E8-E6CE-4FAA-8072-7D09239969A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{170689D7-895A-4A1D-8115-EB9ABABDE70F} = {4CD4A7E8-E6CE-4FAA-8072-7D09239969A9}
+		{FEAC1737-88B4-4F81-A2B0-67C89FD190EE} = {4CD4A7E8-E6CE-4FAA-8072-7D09239969A9}
+		{1701429F-736F-4D93-BA38-24BE67B0521A} = {4CD4A7E8-E6CE-4FAA-8072-7D09239969A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD061C10-9424-4FE5-B23B-901F16B5B9DC}
