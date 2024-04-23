@@ -8,7 +8,6 @@ namespace CCSWE.nanoFramework.Threading.Internal
 {
     internal readonly struct WorkItem
     {
-        // TODO: I think I want to turn this into an Action and remove the state
         public readonly WaitCallback CallBack;
         public readonly object? State;
 
