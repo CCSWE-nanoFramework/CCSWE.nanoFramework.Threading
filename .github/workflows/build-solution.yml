@@ -19,8 +19,6 @@ jobs:
     env:
       BUILD_CONFIGURATION: 'Release'
       GITHUB_TOKEN: ${{ github.token }}
-      NUGET_PACKAGE_NAME_1: 'CCSWE.nanoFramework.Threading'
-      NUGET_PACKAGE_NAME_2: 'CCSWE.nanoFramework.Threading.TestFramework'
       SOLUTION: 'CCSWE.nanoFramework.Threading.sln'
 
     steps:
@@ -53,18 +51,18 @@ jobs:
 
       # TODO: Add tests
 
-      - name: Build NuGet packages [1]
-        run: nuget pack ${{ env.NUGET_PACKAGE_NAME_1 }}.nuspec -Version ${{ env.NBGV_NuGetPackageVersion }} -Symbols -SymbolPackageFormat snupkg -properties Configuration=${{ env.BUILD_CONFIGURATION }}
+      - name: Build NuGet packages
+#        if: startsWith(github.ref, 'refs/heads/master')
+        run: |
+          $files = Get-ChildItem -Filter *.nuspec
+          foreach ($file in $files) {
+            nuget pack $file.Name -Version ${{ env.NBGV_NuGetPackageVersion }} -Symbols -SymbolPackageFormat snupkg -properties Configuration=${{ env.BUILD_CONFIGURATION }}
+          }
 
-      - name: Publish NuGet packages to nuget.org [1]
+      - name: Publish NuGet packages
         if: startsWith(github.ref, 'refs/heads/master')
         run: |
-          nuget push "**/${{ env.NUGET_PACKAGE_NAME_1 }}*.nupkg" -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_ORG_API_KEY }} -SkipDuplicate
-
-      - name: Build NuGet packages [2]
-        run: nuget pack ${{ env.NUGET_PACKAGE_NAME_2 }}.nuspec -Version ${{ env.NBGV_NuGetPackageVersion }} -Symbols -SymbolPackageFormat snupkg -properties Configuration=${{ env.BUILD_CONFIGURATION }}
-
-      - name: Publish NuGet packages to nuget.org [2]
-        if: startsWith(github.ref, 'refs/heads/master')
-        run: |
-          nuget push "**/${{ env.NUGET_PACKAGE_NAME_2 }}*.nupkg" -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_ORG_API_KEY }} -SkipDuplicate
+          $files = Get-ChildItem -Filter *.nupkg
+          foreach ($file in $files) {
+            nuget push $file.Name -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_ORG_API_KEY }} -SkipDuplicate
+          }
