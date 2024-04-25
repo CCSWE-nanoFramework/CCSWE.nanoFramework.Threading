@@ -52,7 +52,6 @@ jobs:
       # TODO: Add tests
 
       - name: Build NuGet packages
-#        if: startsWith(github.ref, 'refs/heads/master')
         run: |
           $files = Get-ChildItem -Filter *.nuspec
           foreach ($file in $files) {
