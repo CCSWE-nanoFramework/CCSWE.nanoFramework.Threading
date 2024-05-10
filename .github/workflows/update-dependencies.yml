@@ -1,14 +1,9 @@
-# Copyright (c) .NET Foundation and Contributors
-# See LICENSE file in the project root for full license information.
-
-# This workflow will periodically check .NET nanoFramework dependencies and updates them in the repository it's running.
-
 name: Update dependencies
 
 on: 
   schedule:
   # At 20:20 UTC every day.
-  - cron:  '20 20 * * *'
+  - cron: '20 20 * * *'
   
   repository_dispatch:
     types: update-dependencies
@@ -17,9 +12,9 @@ on:
 
 jobs:
   update-dependencies:
-    name: nanoFramework
-    uses: nanoframework/nf-tools/.github/workflows/update-dependencies.yml@main
+    name: Update dependencies
+    uses: CCSWE-nanoframework/actions-nanoframework/.github/workflows/update-dependencies.yml@master
     secrets: inherit
     with:
-      solutionsToCheck: 'CCSWE.nanoFramework.Threading.sln'
+      solution: 'CCSWE.nanoFramework.Threading.sln'
       branchToPr: 'master'

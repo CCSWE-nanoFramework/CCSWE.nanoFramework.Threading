@@ -1,20 +1,11 @@
-# Copyright (c) .NET Foundation and Contributors
-# See LICENSE file in the project root for full license information.
-
 name: Pull Request
 
 on:
   pull_request:
 
 jobs:
-  check_package_lock:
-    name: nanoFramework
-    uses: nanoframework/nf-tools/.github/workflows/check-package-lock.yml@main
-    with:
-      solution: 'CCSWE.nanoFramework.Threading.sln'
-  check_nuget_latest:
-    name: nanoFramework
-    uses: nanoframework/nf-tools/.github/workflows/check-packages-updated.yml@main
-    secrets: inherit
+  pull_request_checks:
+    name: Checks
+    uses: CCSWE-nanoframework/actions-nanoframework/.github/workflows/pull-request-checks.yml@master
     with:
       solution: 'CCSWE.nanoFramework.Threading.sln'
