@@ -52,8 +52,8 @@ namespace CCSWE.nanoFramework.Threading.Internal
 
         public ThreadPoolInternal(int workers, int workItems)
         {
-            Ensure.IsInRange(nameof(workers), workers > 0, $"{nameof(workers)} must be greater than zero");
-            Ensure.IsInRange(nameof(workItems), workItems > 0, $"{nameof(workItems)} must be greater than zero");
+            Ensure.IsInRange(workers > 0, $"{nameof(workers)} must be greater than zero", nameof(workers));
+            Ensure.IsInRange(workItems > 0, $"{nameof(workItems)} must be greater than zero", nameof(workItems));
 
             CancellationToken = CancellationTokenSource.Token;
             Workers = workers;
@@ -183,7 +183,7 @@ namespace CCSWE.nanoFramework.Threading.Internal
         {
             ThrowIfDisposed();
 
-            Ensure.IsNotNull(nameof(callback), callback);
+            Ensure.IsNotNull(callback);
 
             lock (_lock)
             {

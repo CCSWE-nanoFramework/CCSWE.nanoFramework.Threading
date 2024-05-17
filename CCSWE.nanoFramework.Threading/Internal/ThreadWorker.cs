@@ -72,9 +72,9 @@ namespace CCSWE.nanoFramework.Threading.Internal
 #endif
         }
 
-            public void Post(WaitCallback callback, object? state)
+        public void Post(WaitCallback callback, object? state)
         {
-            Ensure.IsNotNull(nameof(callback), callback);
+            Ensure.IsNotNull(callback);
 
             lock (_lock)
             {

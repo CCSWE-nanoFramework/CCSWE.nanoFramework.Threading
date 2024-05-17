@@ -22,8 +22,8 @@ namespace CCSWE.nanoFramework.Threading
         /// <param name="consumerCallback">The callback responsible for processing items added.</param>
         public ConsumerThreadPool(int consumersThreads, ConsumerCallback consumerCallback)
         {
-            Ensure.IsInRange(nameof(consumersThreads), consumersThreads > 0, $"'{nameof(consumersThreads)}' must be greater than zero.");
-            Ensure.IsNotNull(nameof(consumerCallback), consumerCallback);
+            Ensure.IsInRange(consumersThreads > 0, $"'{nameof(consumersThreads)}' must be greater than zero.", nameof(consumersThreads));
+            Ensure.IsNotNull(consumerCallback);
 
             CancellationToken = CancellationTokenSource.Token;
 
@@ -33,7 +33,7 @@ namespace CCSWE.nanoFramework.Threading
 
             if (!threadsStarting)
             {
-                // Thread pool was full so we'll spin up a new thread to create the consumer threads
+                // Thread pool was full, so we'll spin up a new thread to create the consumer threads
                 new Thread(() => { CreateConsumerThreads(consumersThreads); }).Start();
             }
         }
@@ -119,7 +119,7 @@ namespace CCSWE.nanoFramework.Threading
         {
             ThrowIfDisposed();
 
-            Ensure.IsNotNull(nameof(item), item);
+            Ensure.IsNotNull(item);
 
             _items.Enqueue(item);
             _itemPending.Set();
