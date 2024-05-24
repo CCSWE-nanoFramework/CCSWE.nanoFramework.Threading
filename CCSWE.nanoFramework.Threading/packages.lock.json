@@ -4,15 +4,15 @@
     ".NETnanoFramework,Version=v1.0": {
       "CCSWE.nanoFramework.Collections.Concurrent": {
         "type": "Direct",
-        "requested": "[1.0.12, 1.0.12]",
-        "resolved": "1.0.12",
-        "contentHash": "Ozb5ini1Di6jRhIGdW7XziVnOFamZvAsAwtpvXGNM71X5QVHqv25Gq0CzMY6ybH2hYfYZ8ppNyS+qSj9579vvw=="
+        "requested": "[1.0.15, 1.0.15]",
+        "resolved": "1.0.15",
+        "contentHash": "QYJqAlwt8IadPxSWPx+0ON7NlYBLkYi/epyRit9mYfPlTdrbDGmOgfchvkqj787UEhYkurnGktjcfjYwT0Qs9g=="
       },
       "CCSWE.nanoFramework.Core": {
         "type": "Direct",
-        "requested": "[1.0.13, 1.0.13]",
-        "resolved": "1.0.13",
-        "contentHash": "6fOGhbSmuSSokaUEMpSYHIsbxbT58IeFQFnXRISflq95VqL2xCOxfFqQ5Hw8Ktkvb/zlboxpBsL4jPtyVWXUZQ=="
+        "requested": "[1.0.15, 1.0.15]",
+        "resolved": "1.0.15",
+        "contentHash": "GhMmBjlM8c0NsPPGKONElTU+YMYS3QBdgbTItdwcIDiEc+Rn8N0NvgKpd3d3TxclrHtGjZnDFF/eWqWy8Kn6dA=="
       },
       "nanoFramework.CoreLibrary": {
         "type": "Direct",
@@ -25,6 +25,12 @@
         "requested": "[1.5.31, 1.5.31]",
         "resolved": "1.5.31",
         "contentHash": "q7G0BHkbhUzpUJiOQNlZZDSMcZEU2/QJBDiSEQAF23wOya4EBaCXS74jAVcEfkHBgOkF413jKZq5vldpjqUfUw=="
+      },
+      "nanoFramework.System.Runtime": {
+        "type": "Direct",
+        "requested": "[1.0.27, 1.0.27]",
+        "resolved": "1.0.27",
+        "contentHash": "aMwvQV6AR+XlDc+dHR/fWWnTe5dc7LDaqZS0ccfmd31Y39dZnmX3iQB2wXWtZGvXLCC+obc3IF3Vc70FiG0raw=="
       },
       "nanoFramework.System.Text": {
         "type": "Direct",
