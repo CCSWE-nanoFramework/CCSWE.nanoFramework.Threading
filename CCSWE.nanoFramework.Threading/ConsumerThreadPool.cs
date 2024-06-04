@@ -60,7 +60,7 @@ namespace CCSWE.nanoFramework.Threading
                     break;
                 }
 
-                while (_items.TryDequeue(out var item) && item is not null)
+                while (_items.TryDequeue(out var item))
                 {
                     _consumerCallback(item);
                 }

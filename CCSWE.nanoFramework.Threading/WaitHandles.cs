@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 
+// ReSharper disable UnusedMember.Global
 namespace CCSWE.nanoFramework.Threading
 {
     /// <summary>
@@ -70,7 +71,7 @@ namespace CCSWE.nanoFramework.Threading
         /// <param name="timeout">The amount of time to wait, or <see cref="Timeout.InfiniteTimeSpan"/> (-1) to wait indefinitely.</param>
         /// <param name="exitContext">true to exit the synchronization domain for the context before the wait (if in a synchronized context), and reacquire it afterward; otherwise, false.</param>
         /// <param name="waitHandles">A WaitHandle array containing the objects for which the current instance will wait.</param>
-        /// <returns>The array index of the object that satisfied the wait, or <see cref="WaitHandle.WaitTimeout"/> if no object satisfied the wait and a time interval equivalent to <paramref name="millisecondsTimeout"/> has passed.</returns>
+        /// <returns>The array index of the object that satisfied the wait, or <see cref="WaitHandle.WaitTimeout"/> if no object satisfied the wait and a time interval equivalent to <paramref name="timeout"/> has passed.</returns>
         public static int WaitAny(TimeSpan timeout, bool exitContext, params WaitHandle[] waitHandles)
         {
             return WaitAny((int)timeout.TotalMilliseconds, exitContext, waitHandles);

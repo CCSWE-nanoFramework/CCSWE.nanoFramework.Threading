@@ -37,13 +37,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=1.0.15.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.15\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent">
+      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.17\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
     </Reference>
-    <Reference Include="CCSWE.nanoFramework.Core, Version=1.0.16.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.16\lib\CCSWE.nanoFramework.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="CCSWE.nanoFramework.Core">
+      <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.18\lib\CCSWE.nanoFramework.Core.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
@@ -75,7 +73,6 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.6.133\build\Nerdbank.GitVersioning.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.6.133\build\Nerdbank.GitVersioning.props'))" />
     <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.6.139\build\Nerdbank.GitVersioning.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.6.139\build\Nerdbank.GitVersioning.props'))" />
     <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.6.139\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.6.139\build\Nerdbank.GitVersioning.targets'))" />
   </Target>
