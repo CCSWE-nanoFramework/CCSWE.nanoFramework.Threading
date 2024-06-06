@@ -37,8 +37,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent">
-      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.17\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
+    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=1.0.18.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.18\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CCSWE.nanoFramework.Core">
       <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.18\lib\CCSWE.nanoFramework.Core.dll</HintPath>
