@@ -40,8 +40,8 @@
     <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=1.0.24.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.24\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
     </Reference>
-    <Reference Include="CCSWE.nanoFramework.Core, Version=1.0.26.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.26\lib\CCSWE.nanoFramework.Core.dll</HintPath>
+    <Reference Include="CCSWE.nanoFramework.Core, Version=1.0.27.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.27\lib\CCSWE.nanoFramework.Core.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
