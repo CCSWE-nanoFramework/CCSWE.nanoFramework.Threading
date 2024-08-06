@@ -10,9 +10,9 @@
       },
       "CCSWE.nanoFramework.Core": {
         "type": "Direct",
-        "requested": "[1.0.27, 1.0.27]",
-        "resolved": "1.0.27",
-        "contentHash": "kg2ZLnr/iwM7c8cFNdampXrbbmwGqYqFlIK6qQICZ7m4OtCmNZgRawXjtvDSWdQnpvUQDcP31wPiiueEylRMCQ=="
+        "requested": "[1.0.28, 1.0.28]",
+        "resolved": "1.0.28",
+        "contentHash": "0I/uVPRvE3eIC5V7UGTjpDHwc/iwzc9Y0n/q8jfjnsqZc5BPdgbj8xbp2RgthEtT/HSIWmo6CJvdaSz25WpWaA=="
       },
       "nanoFramework.CoreLibrary": {
         "type": "Direct",
