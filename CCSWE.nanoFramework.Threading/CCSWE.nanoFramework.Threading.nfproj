@@ -37,11 +37,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=1.0.48.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.48\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
+    <Reference Include="CCSWE.nanoFramework.Collections.Concurrent, Version=1.0.50.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\CCSWE.nanoFramework.Collections.Concurrent.1.0.50\lib\CCSWE.nanoFramework.Collections.Concurrent.dll</HintPath>
     </Reference>
-    <Reference Include="CCSWE.nanoFramework.Core, Version=1.0.47.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.47\lib\CCSWE.nanoFramework.Core.dll</HintPath>
+    <Reference Include="CCSWE.nanoFramework.Core, Version=1.0.48.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\CCSWE.nanoFramework.Core.1.0.48\lib\CCSWE.nanoFramework.Core.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\packages\nanoFramework.CoreLibrary.1.15.5\lib\mscorlib.dll</HintPath>
@@ -52,8 +52,8 @@
     <Reference Include="nanoFramework.System.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
       <HintPath>..\packages\nanoFramework.System.Runtime.1.0.27\lib\nanoFramework.System.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="nanoFramework.System.Text">
-      <HintPath>..\packages\nanoFramework.System.Text.1.2.54\lib\nanoFramework.System.Text.dll</HintPath>
+    <Reference Include="nanoFramework.System.Text, Version=1.3.1.0, Culture=neutral, PublicKeyToken=c07d481e9758c731">
+      <HintPath>..\packages\nanoFramework.System.Text.1.3.1\lib\nanoFramework.System.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>..\packages\nanoFramework.System.Threading.1.1.32\lib\System.Threading.dll</HintPath>
